@@ -6,7 +6,9 @@ import ReactFlow, {
   BackgroundVariant,
   applyNodeChanges,
   applyEdgeChanges,
+  addEdge as rfAddEdge,
   type Node,
+   type Connection,
   type Edge,
   type NodeChange,
   type EdgeChange,
@@ -37,12 +39,14 @@ let id = 0;
 //           }
 //         };
 
-const initialEdges: Edge[] = [{ id: 'e1-2', source: '1', target: '2' }];
+//const initialEdges: Edge[] = [{ id: 'e1-2', source: '1', target: '2' }];
 
 function App() {
   const [nodes, setNodes] = useState<Node[]>([]);
-  const [edges, setEdges] = useState<Edge[]>(initialEdges);
+  const [edges, setEdges] = useState<Edge[]>([]);
   const [FirstNode, setFirstNode] = useState(true);
+
+  //  const [sourceNodeId, setSourceNodeId] = useState<string | null>(null);
 
   const onNodesChange = useCallback(
     (changes: NodeChange[]) => setNodes((nds) => applyNodeChanges(changes, nds)),
@@ -52,6 +56,14 @@ function App() {
   const onEdgesChange = useCallback(
     (changes: EdgeChange[]) => setEdges((eds) => applyEdgeChanges(changes, eds)),
     []
+  );
+
+     const onConnect = useCallback(
+    (params: Connection) => {
+      const newEdge = { ...params, id: `e-${params.source}-${params.target}` };
+      setEdges((eds) => rfAddEdge(newEdge, eds));
+    },
+    [setEdges]
   );
 
 const AddNode = ()=>{
@@ -67,6 +79,36 @@ const AddNode = ()=>{
    setNodes((nds) => [...nds, NewNode]); 
    setFirstNode(false); 
 };
+
+// const onNodeClick = useCallback((event: React.MouseEvent, node: Node) => {
+//     if (!sourceNodeId) {
+//         setSourceNodeId(node.id);
+//         setNodes((nds) => 
+//             nds.map(n => ({
+//                 ...n,
+//                 style: n.id === node.id ? { border: '2px solid #28a745', boxShadow: '0 0 10px #28a745' } : undefined
+//             }))
+//         );
+//     } else {
+//         if (sourceNodeId !== node.id) { 
+//             const newEdge: Edge = {
+//                 id: `e-${sourceNodeId}-${node.id}`,
+//                 source: sourceNodeId,
+//                 target: node.id,
+//                 animated: true, 
+//             };
+//             setEdges((eds) => [...eds, newEdge]);
+//         }
+//         setSourceNodeId(null);
+//         setNodes((nds) => 
+//             nds.map(n => ({
+//                 ...n,
+//                 style: undefined 
+//             }))
+//         );
+//     }
+//   }, [sourceNodeId, setNodes, setEdges]);
+
 
   return (
     <div style={{ width: '100vw', height: '100vh' }}>
@@ -114,9 +156,12 @@ const AddNode = ()=>{
 
       <ReactFlow
         nodes={nodes}
-        edges={edges}
-        onNodesChange={onNodesChange}
-        onEdgesChange={onEdgesChange}
+       edges={edges}
+        onNodesChange={onNodesChange} 
+       onEdgesChange={onEdgesChange}
+       onConnect={onConnect} 
+      fitView
+
       >
         <Controls />
         <MiniMap />
@@ -125,5 +170,7 @@ const AddNode = ()=>{
     </div>
   );
 }
+
+
 
 export default App;
