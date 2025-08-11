@@ -9,7 +9,7 @@
 }
 
 .custom-node.selected {
-  border-color: #0dcd8a;
+  border-color: #03d69d;
   box-shadow: 0 0 15px rgba(13, 205, 138, 0.7);
   transform: scale(1.05);
 }

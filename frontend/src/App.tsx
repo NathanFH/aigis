@@ -1,7 +1,9 @@
 import React, { useState, useCallback } from 'react';
 import { Handle, Position } from 'reactflow';
 import type { NodeProps } from 'reactflow';
-import '../src/assets/CustomNode.css'
+import '../src/assets/CustomNode.css';
+import './Header.css';
+import Header from "./Header"; 
 import ReactFlow, {
   MiniMap,
   Controls,
@@ -140,9 +142,11 @@ const AddNode = () => {
 
 
   return (
-    <div style={{ width: '100vw', height: '100vh' }}>
+    <div style={{ width: '100%', height: '100vh' }}>
+    <Header />
 
-       {FirstNode && (
+    <div style={{ marginTop: '60px', position: 'relative', height: 'calc(100vh - 60px)' }}>
+      {FirstNode && (
         <button
           onClick={AddNode}
           style={{
@@ -153,7 +157,7 @@ const AddNode = () => {
             zIndex: 10,
             padding: '12px 16px',
             borderRadius: '6px',
-            background: '#0dcd8a',
+            background: '#03d69d',
             color: 'white',
             border: 'none',
             fontSize: '16px',
@@ -164,18 +168,46 @@ const AddNode = () => {
         </button>
       )}
 
-        <div style={{ position: 'absolute', zIndex: 10, top: 15, left: 15, display: 'flex', gap: '10px' }}>
-        <button onClick={AddNode} style={{ padding: '8px 12px', borderRadius: '5px', background: '#0dcd8a', color: 'white', border: 'none', cursor: 'pointer' }}>
+      <div
+        style={{
+          position: 'absolute',
+          zIndex: 10,
+          top: 15,
+          left: 15,
+          display: 'flex',
+          gap: '10px',
+        }}
+      >
+        <button
+          onClick={AddNode}
+          style={{
+            padding: '8px 12px',
+            borderRadius: '5px',
+            background: '#03d69d',
+            color: 'white',
+            border: 'none',
+            cursor: 'pointer',
+          }}
+        >
           Adicionar Nó
         </button>
-        <button onClick={deleteNode} style={{ padding: '8px 12px', borderRadius: '5px', background: '#dc3545', color: 'white', border: 'none', cursor: 'pointer' }}>
+        <button
+          onClick={deleteNode}
+          style={{
+            padding: '8px 12px',
+            borderRadius: '5px',
+            background: '#dc3545',
+            color: 'white',
+            border: 'none',
+            cursor: 'pointer',
+          }}
+        >
           Deletar Selecionado
         </button>
       </div>
 
-
       <ReactFlow
-       nodes={nodes} 
+        nodes={nodes}
         edges={edges}
         nodeTypes={nodeTypes}
         onNodesChange={onNodesChange}
@@ -185,10 +217,12 @@ const AddNode = () => {
         deleteKeyCode={['Backspace', 'Delete']}
       >
         <Controls />
-        <MiniMap />
+        <MiniMap
+        position="bottom-right" />
         <Background variant={BackgroundVariant.Dots} gap={12} size={1} />
       </ReactFlow>
     </div>
+  </div>
   );
 }
 
